@@ -1,14 +1,18 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -O2
-DEPS = fib.h
-OBJ = fib.o test_fib.o
+CFLAGS = -Wall -Wextra -Werror
+TARGET = main
+SRCS = main.c fibonacci.c memoization.c
+OBJS = $(SRCS:.c=.o)
 
-%.o: %.c $(DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS)
+all: $(TARGET)
 
-test: $(OBJ)
-	$(CC) -o $@ $^ $(CFLAGS)
-	./test
+$(TARGET): $(OBJS)
+	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS)
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f *.o test
+	rm -f $(OBJS) $(TARGET)
+
+.PHONY: all clean
